@@ -43,12 +43,26 @@ copy, scoring, or logic question — this file just tracks build/deploy state.
   (Netlify manual zip) once a site exists; no repo/hosting created yet this
   session.
 - GenX CTA / service details (name, price, booking URL, who conducts it) are
-  **not yet confirmed** — using placeholder copy ("Request a GenX Leadership
-  Review", placeholder mailto/booking link) per the master spec's Section 10
-  CTA boundary. Swap when GenX confirms.
+  **not yet confirmed**. Per the user's explicit instruction, `CTA_COPY.buttonHref`
+  in `js/quiz-data.js` is left as an **empty string on purpose** — the button
+  renders with its real label/styling but does not navigate anywhere
+  (`js/app.js` → `buildCta()` falls back to `href="#"` + `preventDefault()`
+  when empty) until the GenX team pastes the real booking/application URL
+  into that one field. Do not fill it in with a guess.
 - Marketing Performance and AI Enablement areas are shown to **every**
   respondent in this pilot (not conditionally skipped) — matches spec
   Version 0.1 default; rely on "Not applicable" as the escape hatch.
+- Added a "Download your result (PDF)" button on the full-result screen
+  (`js/app.js` → `renderFullResult()`), using the browser's native
+  `window.print()` rather than a JS PDF library, per the project's
+  no-dependencies philosophy. `styles.css` has a `@media print` block that
+  strips the interactive chrome (`.no-print`), flattens cards to a plain
+  document layout, and forces the brand-colored badges/callouts to print
+  with `print-color-adjust: exact` (browsers strip background colors from
+  print by default otherwise). The full result + CTA are wrapped in
+  `#printable-result` so print styling doesn't leak onto other screens.
+  The result page also now opens with a small "Prepared for [company] —
+  [date]" header for a properly structured, presentable printed document.
 
 ## Repo / branch
 - GitHub: `GenXLeadership/Lead-Magent-B2B-`

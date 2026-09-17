@@ -439,8 +439,10 @@ const CTA_COPY = {
   body:
     "Your result is a starting hypothesis, not a finished diagnosis. A focused GenX Leadership conversation can examine the evidence behind the result, test whether another constraint sits underneath it, and identify the most useful next decision.",
   buttonLabel: "Request a GenX Leadership Review",
-  // Placeholder — replace once GenX confirms the booking/application flow.
-  buttonHref: "mailto:hello@genxleadership.example?subject=GenX%20Leadership%20Review%20Request",
+  // GenX team: paste the real booking/application URL here once confirmed.
+  // Left empty on purpose — the button renders but does not navigate
+  // anywhere until this is filled in (see buildCta() in js/app.js).
+  buttonHref: "",
 };
 
 const LIMITATIONS_STATEMENT =

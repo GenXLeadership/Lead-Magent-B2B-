@@ -641,12 +641,16 @@
   // Full result page
   // ---------------------------------------------------------------------
   function renderFullResult() {
+    const printable = document.createElement("div");
+    printable.id = "printable-result";
+
     const screen = document.createElement("div");
     screen.className = "screen";
     screen.appendChild(brandHeader());
 
     const card = document.createElement("div");
     card.className = "card";
+    card.appendChild(buildResultReportHeader());
 
     const result = state.result;
 
@@ -656,14 +660,43 @@
       card.appendChild(buildPrimaryResult(result));
     }
 
+    const downloadBtn = document.createElement("button");
+    downloadBtn.className = "btn btn-secondary btn-block no-print";
+    downloadBtn.style.marginTop = "20px";
+    downloadBtn.textContent = "Download your result (PDF)";
+    downloadBtn.onclick = () => window.print();
+    card.appendChild(downloadBtn);
+
     screen.appendChild(card);
-    root.appendChild(screen);
+    printable.appendChild(screen);
 
     const ctaScreen = document.createElement("div");
     ctaScreen.className = "screen";
     ctaScreen.style.marginTop = "20px";
     ctaScreen.appendChild(buildCta());
-    root.appendChild(ctaScreen);
+    printable.appendChild(ctaScreen);
+
+    root.appendChild(printable);
+  }
+
+  function buildResultReportHeader() {
+    const wrap = document.createElement("div");
+    wrap.className = "report-header";
+    const preparedFor = state.lead.company || state.lead.name || "";
+    const dateStr = new Date().toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    wrap.innerHTML = `
+      <div class="report-header-row">
+        ${preparedFor ? `<span>Prepared for <strong>${preparedFor}</strong></span>` : "<span></span>"}
+        <span>${dateStr}</span>
+      </div>
+      <hr class="section-divider" />
+    `;
+    return wrap;
   }
 
   function buildPrimaryResult(result) {
@@ -791,9 +824,21 @@
     `;
     const btn = document.createElement("a");
     btn.className = "btn btn-cta btn-block";
-    btn.href = CTA_COPY.buttonHref;
+    // CTA_COPY.buttonHref is intentionally left empty until GenX supplies
+    // the real booking/application URL (see js/quiz-data.js). Until then,
+    // the button renders and still confirms the request, but does not
+    // navigate anywhere or reload the page.
+    const hasRealLink = Boolean(CTA_COPY.buttonHref);
+    btn.href = hasRealLink ? CTA_COPY.buttonHref : "#";
+    if (hasRealLink) {
+      btn.target = "_blank";
+      btn.rel = "noopener";
+    }
     btn.textContent = CTA_COPY.buttonLabel;
-    btn.onclick = () => go("confirmation");
+    btn.onclick = (e) => {
+      if (!hasRealLink) e.preventDefault();
+      go("confirmation");
+    };
     card.appendChild(btn);
     return card;
   }
