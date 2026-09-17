@@ -92,7 +92,17 @@ copy, scoring, or logic question — this file just tracks build/deploy state.
   caused repeated failures on the B2C build (deployment access must be
   **Execute as: Me + Anyone**, and every code edit needs **Manage
   deployments → edit → New version → Deploy**, not just Save). See that file
-  before doing anything with the backend.
+  before doing anything with the backend. Single source of truth for columns
+  is the `FIELDS` array (key/label/group per column) — writes to a tab named
+  **"Leads"** (auto-created if missing, not "Sheet1"). `setupSheet()` writes
+  a two-row structured header (merged brand-navy group labels over ivory
+  field labels, e.g. "Market Clarity" spanning BQ1–BQ3) and freezes it;
+  `doPost()` also calls it automatically if the sheet has no header yet, so
+  the header can't be forgotten. The user's live Sheet:
+  https://docs.google.com/spreadsheets/d/1YpWLsLczQQIcEW-vQzH0a0i13z9eqwAumYEOLLe7c-4/edit
+  — no Sheets-API tool is available in this environment, so header
+  creation happens by running `setupSheet()` inside the Apps Script editor,
+  not by Claude writing to the sheet directly.
 - `assets/genx-logo.png` — GenX Leadership Academy logo, extracted from the
   brand guidelines doc.
 - `netlify.toml` — `publish = "."`, `command = ""`.
@@ -101,12 +111,17 @@ copy, scoring, or logic question — this file just tracks build/deploy state.
 - Full pilot spec scaffolded: quiz-data (BQ1–BQ15), scoring engine matching
   Sections 4/6/9/18 of the master file, complete screen flow, GenX-branded
   styles, lead capture wiring (endpoint not yet live).
-- Lead capture backend: `.gs` script written but **not yet deployed** — no
-  Google Sheet has been created for B2B yet. Do NOT reuse the Freedom Room
-  B2C sheet. Ask the user before creating the new Sheet/deployment, then
-  follow `apps-script-lead-capture.gs`'s setup checklist exactly to avoid
-  repeating the B2C access/versioning issues.
-- Not yet deployed to Netlify or any other host.
+- Lead capture backend: `.gs` script written and updated with a self-
+  formatting `setupSheet()` (structured two-row header, no manual column
+  typing needed). The user created their own dedicated B2B Sheet (see URL
+  above) — Apps Script deployment (Extensions → Apps Script → paste →
+  `setupSheet()` → Deploy as web app) has **not** been done from this side
+  since Claude cannot write into or open the Apps Script editor of the
+  user's Sheet directly. Waiting on the user to deploy and send back the
+  real `/exec` URL for `SHEET_ENDPOINT`.
+- Site is live at https://genx-leadership.netlify.app/ (manual zip deploy,
+  matching B2C). `SHEET_ENDPOINT` in `js/app.js` is still the placeholder —
+  update and redeploy once the real Apps Script URL exists.
 - Not yet QA'd against the master spec's Section 12 test cases.
 
 ## Known open items (do not resolve without asking)
