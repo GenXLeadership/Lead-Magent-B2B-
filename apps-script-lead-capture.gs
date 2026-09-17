@@ -50,14 +50,20 @@
  *    stays stable.
  *
  * 6. Test end-to-end from the actual deployed site (or locally via a static
- *    server), not by running doPost manually in the Apps Script editor —
- *    the editor's "Run" button doesn't exercise the web app auth path, so a
- *    misconfigured deployment can look fine there and still fail from the
- *    browser.
+ *    server) at least once — running functions manually in the editor
+ *    doesn't exercise the web app auth path, so a misconfigured deployment
+ *    (wrong "Who has access") can look fine there and still fail from the
+ *    browser. BUT: if a real submission still isn't showing up and the
+ *    Executions log says "Completed" with no error visible, run the
+ *    "testDoPost" function (function dropdown -> testDoPost -> Run) — it
+ *    calls doPost() directly with a realistic fake payload, so any error
+ *    swallowed by doPost's try/catch shows up as a normal thrown exception
+ *    right there in the editor, instead of only in Executions logs.
  *
  * 7. Check the Sheet after a real test submission to confirm a row appears
  *    below the header, with values landing in the correct columns, before
- *    considering this done.
+ *    considering this done. Data lands on the "Leads" tab specifically —
+ *    check that tab, not "Sheet1" if one also exists.
  * ============================================================================
  */
 
@@ -187,6 +193,12 @@ function ensureHeaderRow_(sheet) {
 
 function doPost(e) {
   try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error(
+        "No postData received — e.postData was: " + JSON.stringify(e && e.postData)
+      );
+    }
+
     const sheet = getOrCreateSheet_();
     ensureHeaderRow_(sheet);
 
@@ -201,12 +213,52 @@ function doPost(e) {
 
     sheet.appendRow(row);
 
+    // Visible in Executions -> click the entry -> Logs. Confirms exactly
+    // which spreadsheet/tab/row this run wrote to.
+    console.log(
+      "Lead row appended to '" +
+        sheet.getParent().getName() +
+        "' > '" +
+        sheet.getName() +
+        "' at row " +
+        sheet.getLastRow()
+    );
+
     return ContentService.createTextOutput(
       JSON.stringify({ status: "ok" })
     ).setMimeType(ContentService.MimeType.JSON);
   } catch (err) {
+    // This is the critical bit for debugging a silent failure: the web app
+    // response itself is invisible to the browser (the front end posts with
+    // mode: "no-cors", so it can't read status or body), so the ONLY place
+    // this error is visible is here, in the Executions log for this run.
+    console.error("doPost failed: " + err.message + "\n" + err.stack);
     return ContentService.createTextOutput(
       JSON.stringify({ status: "error", message: err.message })
     ).setMimeType(ContentService.MimeType.JSON);
   }
+}
+
+/**
+ * Run this manually (function dropdown -> testDoPost -> Run) to simulate a
+ * real submission without needing the live site. Unlike a raw doPost() call
+ * from the editor, this builds a realistic event object, so it exercises the
+ * same code path as a real request and will surface the same errors.
+ */
+function testDoPost() {
+  const fakeEvent = {
+    postData: {
+      contents: JSON.stringify({
+        date: new Date().toISOString(),
+        quiz_version: "test",
+        name: "Test User",
+        email: "test@example.com",
+        company: "Test Co",
+        consent: true,
+        BQ1: 2,
+      }),
+    },
+  };
+  const result = doPost(fakeEvent);
+  console.log("testDoPost result: " + result.getContent());
 }
