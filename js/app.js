@@ -6,7 +6,8 @@
 
   // Placeholder endpoint — replace with the real Apps Script /exec URL once
   // deployed. See apps-script-lead-capture.gs and CLAUDE.md for setup steps.
-  const SHEET_ENDPOINT = "REPLACE_WITH_APPS_SCRIPT_EXEC_URL";
+  const SHEET_ENDPOINT =
+    "https://script.google.com/macros/s/AKfycbzb8dD9YBFMXmXXfYTJGc0_LuR4ugtEJkxARvzqAA6pOw3EQja1IQPu2vlhKKiF_1H1/exec";
 
   const root = document.getElementById("app");
 

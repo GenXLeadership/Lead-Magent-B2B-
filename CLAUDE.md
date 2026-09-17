@@ -110,27 +110,31 @@ copy, scoring, or logic question — this file just tracks build/deploy state.
 ## Build status
 - Full pilot spec scaffolded: quiz-data (BQ1–BQ15), scoring engine matching
   Sections 4/6/9/18 of the master file, complete screen flow, GenX-branded
-  styles, lead capture wiring (endpoint not yet live).
-- Lead capture backend: `.gs` script written and updated with a self-
-  formatting `setupSheet()` (structured two-row header, no manual column
-  typing needed). The user created their own dedicated B2B Sheet (see URL
-  above) — Apps Script deployment (Extensions → Apps Script → paste →
-  `setupSheet()` → Deploy as web app) has **not** been done from this side
-  since Claude cannot write into or open the Apps Script editor of the
-  user's Sheet directly. Waiting on the user to deploy and send back the
-  real `/exec` URL for `SHEET_ENDPOINT`.
+  styles. QA'd against 23 of the spec's Section 12 test cases (all pass).
 - Site is live at https://genx-leadership.netlify.app/ (manual zip deploy,
-  matching B2C). `SHEET_ENDPOINT` in `js/app.js` is still the placeholder —
-  update and redeploy once the real Apps Script URL exists.
-- Not yet QA'd against the master spec's Section 12 test cases.
+  matching B2C — user uploaded it themselves; no GitHub-linked auto-deploy).
+- Lead capture backend: **deployed and wired up.** The user created their own
+  Sheet (https://docs.google.com/spreadsheets/d/1YpWLsLczQQIcEW-vQzH0a0i13z9eqwAumYEOLLe7c-4/edit),
+  pasted in `apps-script-lead-capture.gs`, and deployed it as a web app. The
+  live `/exec` URL is now set as `SHEET_ENDPOINT` in `js/app.js`:
+  `https://script.google.com/macros/s/AKfycbzb8dD9YBFMXmXXfYTJGc0_LuR4ugtEJkxARvzqAA6pOw3EQja1IQPu2vlhKKiF_1H1/exec`.
+  **This is not yet reflected on the live Netlify site** — the deployed site
+  was uploaded before this URL was wired in, so it's still POSTing to the
+  placeholder. The updated `js/app.js` needs to be re-zipped and re-dragged
+  onto Netlify's Deploys tab (per the CLAUDE.md manual-deploy workflow) for
+  submissions to actually reach the Sheet. Also worth a real end-to-end test
+  from the live site once redeployed — this sandbox cannot reach
+  script.google.com to test the endpoint itself (same constraint noted on
+  the B2C build).
+- CTA button (`CTA_COPY.buttonHref` in `quiz-data.js`) is intentionally
+  empty, not a mailto link — see "Decisions made with the user" above.
 
 ## Known open items (do not resolve without asking)
-- Exact GenX service name/price/duration/booking URL for the CTA (currently
-  a placeholder mailto link in `quiz-data.js` → `CTA_COPY`).
+- Exact GenX service name/price/duration/booking URL for the CTA.
 - Whether to fast-forward or PR to `main`.
-- Creating the B2B Google Sheet + Apps Script deployment (separate from
-  B2C's) and pasting the resulting URL into `js/app.js` → `SHEET_ENDPOINT`.
-- Netlify site creation/hosting for this project (none exists yet).
+- Re-zipping and re-dragging the site onto Netlify now that `SHEET_ENDPOINT`
+  is set, and confirming a real test submission lands correctly in the
+  "Leads" tab.
 - Final typography pairing — Playfair Display + Inter is a placeholder
   matching the B2C project's Google Fonts approach; the brand doc didn't
   specify exact web fonts.
