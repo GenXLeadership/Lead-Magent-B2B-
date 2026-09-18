@@ -1,4 +1,4 @@
-// GenX Leadership B2B Perspective Scan — pure, DOM-free scoring engine.
+// GenX Leadership B2B Perspective Scan: pure, DOM-free scoring engine.
 // Implements Sections 4, 6, 9, and 18 of the pilot master memory file.
 // Inputs/outputs use plain objects/arrays only so this file can be unit
 // tested without a browser.
@@ -201,7 +201,7 @@ function resolveLowestItem(area, responses) {
 
 /**
  * Top-level orchestration matching the Section 18 decision sequence.
- * Does not decide the tie-breaker choice itself — when routing needs a
+ * Does not decide the tie-breaker choice itself. When routing needs a
  * participant choice (connected_constraints or no_single_constraint), the
  * caller must collect that separately and call resolveLowestItem with the
  * chosen area.

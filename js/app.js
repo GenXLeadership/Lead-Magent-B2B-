@@ -1,10 +1,10 @@
-// GenX Leadership B2B Perspective Scan — state machine + screen rendering.
+// GenX Leadership B2B Perspective Scan: state machine + screen rendering.
 // Pure vanilla JS, no framework, mirrors the Freedom Room B2C app.js pattern.
 
 (function () {
   "use strict";
 
-  // Placeholder endpoint — replace with the real Apps Script /exec URL once
+  // Placeholder endpoint. Replace with the real Apps Script /exec URL once
   // deployed. See apps-script-lead-capture.gs and CLAUDE.md for setup steps.
   const SHEET_ENDPOINT =
     "https://script.google.com/macros/s/AKfycbzb8dD9YBFMXmXXfYTJGc0_LuR4ugtEJkxARvzqAA6pOw3EQja1IQPu2vlhKKiF_1H1/exec";
@@ -99,10 +99,10 @@
       <div class="callout">
         <strong>Before you start:</strong>
         <ul class="plain">
-          <li>Takes approximately 5&ndash;7 minutes.</li>
+          <li>Takes approximately 5 to 7 minutes.</li>
           <li>Intended for leaders with cross-functional visibility.</li>
           <li>Answer based on the past six months, not what's planned or intended.</li>
-          <li>"Not sure" is a valid answer &mdash; do not guess.</li>
+          <li>"Not sure" is a valid answer. Do not guess.</li>
           <li>Your result reflects your perspective, not a validated audit.</li>
         </ul>
       </div>
@@ -143,6 +143,7 @@
       </ul>
       <p class="muted">Please do not enter confidential customer, employee, financial,
       security, or proprietary information in any open-text field.</p>
+      <p class="muted"><a href="${PRIVACY_POLICY_URL}" target="_blank" rel="noopener">Read our full privacy policy</a></p>
     `;
 
     const btn = document.createElement("button");
@@ -250,7 +251,7 @@
         <strong>Response scale</strong>
         <ul class="plain">
           ${RESPONSE_SCALE.filter((s) => s.value !== "not_sure")
-            .map((s) => `<li><strong>${s.value} &mdash; ${s.label}:</strong> ${s.description}</li>`)
+            .map((s) => `<li><strong>${s.value}. ${s.label}:</strong> ${s.description}</li>`)
             .join("")}
         </ul>
       </div>
@@ -317,7 +318,7 @@
       // Attach the handler to the radio input itself, not the wrapping
       // label. A click on a <label> that contains its <input> fires a
       // native click on the label AND a synthetic click on the input that
-      // bubbles back through the label — listening on the label double-
+      // bubbles back through the label, so listening on the label double-
       // fires the handler (and silently skips every other question).
       const input = optEl.querySelector("input");
       input.onclick = (e) => {
@@ -606,7 +607,7 @@
 
   function submitLeadToSheet() {
     if (!SHEET_ENDPOINT || SHEET_ENDPOINT.indexOf("REPLACE_WITH") === 0) {
-      console.warn("Lead capture endpoint not configured yet — skipping submit.");
+      console.warn("Lead capture endpoint not configured yet. Skipping submit.");
       return;
     }
 
@@ -758,6 +759,7 @@
       <div class="footer-note">
         <p>${LIMITATIONS_STATEMENT}</p>
         <p>${EMPLOYMENT_USE_STATEMENT}</p>
+        <p><a href="${PRIVACY_POLICY_URL}" target="_blank" rel="noopener">Privacy Policy</a></p>
       </div>
     `;
     return wrap;
@@ -781,7 +783,7 @@
       <ul class="plain">${
         eligible.length > 0
           ? eligible.map((a) => `<li>${AREA_LABELS[a]}</li>`).join("")
-          : "<li>None &mdash; fewer than two scorable answers were recorded in every area.</li>"
+          : "<li>None. Fewer than two scorable answers were recorded in every area.</li>"
       }</ul>
 
       <h3>Areas limited by visibility, relevance, or unclear wording</h3>
@@ -797,6 +799,7 @@
       <div class="footer-note">
         <p>${LIMITATIONS_STATEMENT}</p>
         <p>${EMPLOYMENT_USE_STATEMENT}</p>
+        <p><a href="${PRIVACY_POLICY_URL}" target="_blank" rel="noopener">Privacy Policy</a></p>
       </div>
     `;
     return wrap;

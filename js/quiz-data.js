@@ -1,4 +1,4 @@
-// GenX Leadership B2B Perspective Scan — canonical question bank and copy.
+// GenX Leadership B2B Perspective Scan: canonical question bank and copy.
 // Source of truth: "GenX Leadership B2B Perspective Scan: Pilot Master
 // Memory File", version 0.1. Do not merge with the Freedom Room B2C quiz.
 // Keep BQ1-BQ15 IDs stable.
@@ -21,7 +21,7 @@ const AREA_LABELS = {
   aiEnablement: "AI Enablement",
 };
 
-// Response scale — 0-3 scored, "not_sure" unscored.
+// Response scale: 0-3 scored, "not_sure" unscored.
 const RESPONSE_SCALE = [
   {
     value: 0,
@@ -123,7 +123,7 @@ const RESPONDENT_CONTEXT_QUESTIONS = [
   },
 ];
 
-// Qualification fields — collected after scored items, never affect scoring.
+// Qualification fields, collected after scored items, never affect scoring.
 const QUALIFICATION_QUESTIONS = [
   {
     id: "urgentConcern",
@@ -431,8 +431,10 @@ const STRENGTH_COPY = {
     "AI Enablement appears relatively consistent. You report that AI initiatives begin with business needs, information rules are clear, and value is measured. Verify that current use cases have owners, baselines, controls, and review dates.",
 };
 
+const PRIVACY_POLICY_URL = "https://www.genxleadershipacademy.com/privacy-9187";
+
 // Approved GenX CTA copy. Service specifics (name/price/duration/booking
-// URL) are NOT yet confirmed by the business — placeholders below per the
+// URL) are NOT yet confirmed by the business, placeholders below per the
 // master spec's Section 10 CTA boundary. Swap when confirmed.
 const CTA_COPY = {
   heading: "Discuss Your GenX Leadership Scan",
@@ -440,7 +442,7 @@ const CTA_COPY = {
     "Your result is a starting hypothesis, not a finished diagnosis. A focused GenX Leadership conversation can examine the evidence behind the result, test whether another constraint sits underneath it, and identify the most useful next decision.",
   buttonLabel: "Request a GenX Leadership Review",
   // GenX team: paste the real booking/application URL here once confirmed.
-  // Left empty on purpose — the button renders but does not navigate
+  // Left empty on purpose. The button renders but does not navigate
   // anywhere until this is filled in (see buildCta() in js/app.js).
   buttonHref: "",
 };

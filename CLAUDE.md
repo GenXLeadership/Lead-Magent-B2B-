@@ -52,6 +52,20 @@ copy, scoring, or logic question — this file just tracks build/deploy state.
 - Marketing Performance and AI Enablement areas are shown to **every**
   respondent in this pilot (not conditionally skipped) — matches spec
   Version 0.1 default; rely on "Not applicable" as the escape hatch.
+- Privacy policy: `PRIVACY_POLICY_URL` in `js/quiz-data.js` points to
+  https://www.genxleadershipacademy.com/privacy-9187, linked from the
+  Privacy screen (`renderPrivacy()`) and the full result page's footer note
+  (per spec Section 5's required "Limitations: disclaimer and privacy
+  link"), both opening in a new tab.
+- Per the user's explicit request, all em dashes and en dashes were removed
+  from every shipped file (`index.html`, `styles.css`, `js/*.js`,
+  `apps-script-lead-capture.gs`) — both in user-visible copy and in code
+  comments — rewritten as plain sentences, colons, or hyphens instead. This
+  includes the Apps Script sheet column labels (e.g. "BQ1 — Customer
+  intelligence" became "BQ1: Customer intelligence", which is what actually
+  shows in the Sheet header). `CLAUDE.md` itself was left as-is since it
+  isn't shipped or user-facing. Keep this convention for any new copy added
+  going forward.
 - Added a "Download your result (PDF)" button on the full-result screen
   (`js/app.js` → `renderFullResult()`), using the browser's native
   `window.print()` rather than a JS PDF library, per the project's
